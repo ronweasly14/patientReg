@@ -1,15 +1,14 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "your_database_name";
+$dbHost = "localhost";
+$dbUser = "root";
+$dbPassword = "";
+$dbName = "patientReg";
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+try {
+    $dsn = "mysql:host=" . $dbHost . ";dbname=" . $dbName;
+    $pdo = new PDO($dsn, $dbUser, $dbPassword);
+  // echo "DB Connection success: ";
+} catch (PDOException $e) {
+    echo "DB Connection Failed: " . $e->getMessage();
 }
-echo "Connected successfully";
 ?>
