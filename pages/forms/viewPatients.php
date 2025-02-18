@@ -29,6 +29,7 @@ include("../../database/db.php");
     <link rel="stylesheet" href="../../assets/css/style.css">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="../../assets/images/favicon2.png" />
+
 </head>
 
 <body>
@@ -134,7 +135,7 @@ include("../../database/db.php");
                     <ul class="navbar-nav w-100">
                         <li class="nav-item w-100">
                             <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
-                                <input type="text" class="form-control" placeholder="Search patient" />
+                                <input type="text" id="searchInput" onkeyup="myFunction()" class="form-control" placeholder="Search patient" />
                             </form>
                         </li>
                     </ul>
@@ -286,18 +287,45 @@ include("../../database/db.php");
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
     <script>
-        $(document).ready(function() {
-            $('#patientsTable').DataTable({
-                "searching": true, // Enable search
-                "paging": true, // Enable pagination
-                "info": true, // Show info
-                "lengthChange": true, // Allow changing page length
-                "order": [
-                    [5, "desc"]
-                ] // Order by created_at column descending
-            });
-        });
+        function myFunction() {
+            var input, filter, table, tr, td, i, txtValue;
+
+            // Get the input value from the search field
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+
+            // Get the table and its rows
+            table = document.getElementById("patientsTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all rows
+            for (i = 0; i < tr.length; i++) {
+                var rowMatch = false;
+
+                // Loop through columns 1, 2, and 3 (lname, mname, fname)
+                for (var j = 0; j <= 4; j++) {
+                    td = tr[i].getElementsByTagName("td")[j];
+
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        // If the value matches any column value, mark as a match
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            rowMatch = true;
+                            break; // Exit loop early if a match is found
+                        }
+                    }
+                }
+
+                // Show the row if it matches, otherwise hide it
+                if (rowMatch) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
     </script>
+
     <!-- container-scroller -->
     <!-- plugins:js -->
     <script src="../../assets/vendors/js/vendor.bundle.base.js"></script>
